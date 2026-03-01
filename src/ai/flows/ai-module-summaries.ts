@@ -24,6 +24,7 @@ export type LearningModuleSummary = z.infer<typeof LearningModuleSummarySchema>;
 
 const summarizeModulePrompt = ai.definePrompt({
   name: 'summarizeModulePrompt',
+  model: 'googleai/gemini-1.5-flash-latest',
   input: {schema: LearningModuleContentSchema},
   output: {schema: LearningModuleSummarySchema},
   prompt: `You are an expert educational assistant. Your task is to summarize the provided learning module content concisely and clearly.
