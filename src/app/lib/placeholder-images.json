@@ -1,0 +1,28 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Lush green forest aerial view",
+      "imageUrl": "https://picsum.photos/seed/eco1/1920/1080",
+      "imageHint": "forest nature"
+    },
+    {
+      "id": "module-waste",
+      "description": "Waste segregation bins",
+      "imageUrl": "https://picsum.photos/seed/eco2/600/400",
+      "imageHint": "recycling waste"
+    },
+    {
+      "id": "module-water",
+      "description": "Clear water ripple",
+      "imageUrl": "https://picsum.photos/seed/eco3/600/400",
+      "imageHint": "water conservation"
+    },
+    {
+      "id": "module-energy",
+      "description": "Solar panels in a field",
+      "imageUrl": "https://picsum.photos/seed/eco4/600/400",
+      "imageHint": "solar energy"
+    }
+  ]
+}
