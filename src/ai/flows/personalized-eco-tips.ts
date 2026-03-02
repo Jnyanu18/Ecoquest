@@ -45,7 +45,7 @@ export async function getPersonalizedEcoTips(
 
 const personalizedEcoTipsPrompt = ai.definePrompt({
   name: 'personalizedEcoTipsPrompt',
-  model: 'googleai/gemini-1.5-flash-latest',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: PersonalizedEcoTipsInputSchema },
   output: { schema: PersonalizedEcoTipsOutputSchema },
   prompt: `You are an AI assistant specialized in providing personalized eco-friendly tips to students.
