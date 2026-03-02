@@ -37,7 +37,7 @@ export async function aiPerformanceInsights(
 
 const aiPerformanceInsightsPrompt = ai.definePrompt({
   name: 'aiPerformanceInsightsPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: AiPerformanceInsightsInputSchema},
   output: {schema: AiPerformanceInsightsOutputSchema},
   prompt: `You are an AI-powered educational assistant designed to help teachers understand student performance. Analyze the provided student performance summary and identify their key strengths and areas needing improvement. Provide actionable suggestions for improvement. The output should be concise and directly address the strengths, areas for improvement, and overall summary based on the given data.

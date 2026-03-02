@@ -40,7 +40,7 @@ export async function generateQuiz(input: QuizGenerationInput): Promise<QuizGene
 
 const quizGenerationPrompt = ai.definePrompt({
   name: 'quizGenerationPrompt',
-  model: 'googleai/gemini-1.5-flash',
+  model: 'googleai/gemini-2.0-flash',
   input: {schema: QuizGenerationInputSchema},
   output: {schema: QuizGenerationOutputSchema},
   prompt: `You are an expert educator and quiz creator. Your task is to generate an interactive quiz based on the provided learning content or topic.
