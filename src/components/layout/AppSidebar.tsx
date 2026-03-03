@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -10,7 +11,8 @@ import {
   Settings, 
   ShieldCheck, 
   Users,
-  Leaf
+  Leaf,
+  Calculator
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -33,12 +35,11 @@ import { MOCK_USER } from "@/lib/constants"
 
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard", role: ["student", "teacher", "admin"] },
+  { title: "Carbon Tracker", icon: Calculator, url: "/carbon-calculator", role: ["student"] },
+  { title: "Missions", icon: Target, url: "/missions", role: ["student"] },
   { title: "Learning Hub", icon: BookOpen, url: "/learn", role: ["student"] },
-  { title: "Challenges", icon: Target, url: "/challenges", role: ["student"] },
   { title: "Leaderboards", icon: Trophy, url: "/leaderboards", role: ["student", "teacher", "admin"] },
-  { title: "Eco News", icon: Newspaper, url: "/news", role: ["student", "teacher", "admin"] },
-  { title: "Verification", icon: ShieldCheck, url: "/admin/verify", role: ["admin"] },
-  { title: "Class Stats", icon: Users, url: "/teacher/stats", role: ["teacher"] },
+  { title: "Verification", icon: ShieldCheck, url: "/admin/verify", role: ["admin", "teacher"] },
 ]
 
 export function AppSidebar() {
@@ -61,7 +62,7 @@ export function AppSidebar() {
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Main Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">Mission Control</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {filteredItems.map((item) => (

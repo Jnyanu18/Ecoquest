@@ -1,0 +1,88 @@
+
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Extended user profile with gamification stats.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher", "admin"] },
+        "schoolId": { "type": "string" },
+        "ecoPoints": { "type": "number" },
+        "level": { "type": "number" },
+        "streak": { "type": "number" },
+        "badges": { "type": "array", "items": { "type": "string" } },
+        "totalCO2Saved": { "type": "number" }
+      },
+      "required": ["uid", "role", "schoolId"]
+    },
+    "Mission": {
+      "title": "Eco Mission",
+      "description": "Tasks created by teachers for students to complete.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "points": { "type": "number" },
+        "impactType": { "type": "string", "enum": ["co2", "plastic", "trees", "water"] },
+        "impactValue": { "type": "number" },
+        "schoolId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved"] }
+      }
+    },
+    "Submission": {
+      "title": "Mission Submission",
+      "description": "Student proof for completed missions.",
+      "type": "object",
+      "properties": {
+        "missionId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "proofUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "verified", "rejected"] },
+        "feedback": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "CarbonReport": {
+      "title": "Monthly Carbon Report",
+      "description": "Data used for calculating student carbon footprint.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "month": { "type": "string" },
+        "travelKM": { "type": "object" },
+        "electricityKWh": { "type": "number" },
+        "dietType": { "type": "string" },
+        "totalCO2": { "type": "number" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and gamification state."
+    },
+    "/schools/{schoolId}": {
+      "schema": { "type": "object" },
+      "description": "School aggregate impact stats."
+    },
+    "/missions/{missionId}": {
+      "schema": "Mission",
+      "description": "Global or school-specific tasks."
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Proof of work from students."
+    },
+    "/carbonReports/{reportId}": {
+      "schema": "CarbonReport",
+      "description": "Historical carbon calculation data."
+    }
+  }
+}
