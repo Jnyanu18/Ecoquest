@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState } from 'react'
@@ -8,12 +7,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { calculateMonthlyCarbon, type CarbonInput } from "@/lib/carbon-engine"
-import { Calculator, Leaf, TrendingDown, Info, BarChart3 } from "lucide-react"
+import { Calculator, Leaf, TrendingDown, Info, BarChart3, Loader2 } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import { getEcoMentorAdvice } from "@/ai/flows/ai-eco-mentor"
-import { MOCK_USER } from "@/lib/constants"
+import { useUser, useFirestore } from '@/firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { errorEmitter } from '@/firebase/error-emitter'
+import { FirestorePermissionError } from '@/firebase/errors'
 
 export default function CarbonCalculator() {
+  const { user } = useUser()
+  const db = useFirestore()
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<{ total: number; tips: any; breakdown: any } | null>(null)
 
@@ -25,19 +29,38 @@ export default function CarbonCalculator() {
   })
 
   const calculateImpact = async () => {
-    if (loading) return;
+    if (!user || !db || loading) return;
     setLoading(true)
     try {
-      const { total, breakdown, comparison } = calculateMonthlyCarbon(formData);
+      const { total, breakdown } = calculateMonthlyCarbon(formData);
 
       // Call AI Mentor for personalized insights
       const aiAdvice = await getEcoMentorAdvice({
-        studentName: MOCK_USER.name,
+        studentName: user.displayName || 'Eco Hero',
         monthlyCO2: total,
-        recentActivities: ["Planted 2 trees", "Composted kitchen waste"],
+        recentActivities: ["Audited personal footprint"], // Could be dynamic
         dietType: formData.dietType,
         travelMode: formData.carKM > formData.busKM ? "Private Car" : "Public Transport"
       })
+
+      // Store in Firestore
+      const reportData = {
+        studentId: user.uid,
+        month: new Date().toISOString().slice(0, 7), // YYYY-MM
+        ...formData,
+        totalCO2: total,
+        createdAt: serverTimestamp()
+      }
+
+      addDoc(collection(db, 'carbonReports'), reportData)
+        .catch(async () => {
+          const permissionError = new FirestorePermissionError({
+            path: 'carbonReports',
+            operation: 'create',
+            requestResourceData: reportData,
+          })
+          errorEmitter.emit('permission-error', permissionError)
+        })
 
       setResults({ total, tips: aiAdvice, breakdown })
       toast({
@@ -115,7 +138,7 @@ export default function CarbonCalculator() {
                 onClick={calculateImpact}
                 disabled={loading}
               >
-                {loading ? "Running Audit..." : "Calculate & Consult AI"}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Calculate & Consult AI"}
               </Button>
             </CardContent>
           </Card>
