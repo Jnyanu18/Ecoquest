@@ -3,38 +3,55 @@
   "entities": {
     "User": {
       "title": "User Profile",
-      "description": "Extended user profile with gamification stats.",
+      "description": "Production-grade student/teacher profile with stats.",
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
         "name": { "type": "string" },
         "role": { "type": "string", "enum": ["student", "teacher", "admin"] },
         "schoolId": { "type": "string" },
-        "ecoPoints": { "type": "number" },
-        "level": { "type": "number" },
-        "streak": { "type": "number" },
+        "ecoPoints": { "type": "number", "default": 0 },
+        "level": { "type": "number", "default": 1 },
+        "streak": { "type": "number", "default": 0 },
         "badges": { "type": "array", "items": { "type": "string" } },
-        "totalCO2Saved": { "type": "number" }
+        "totalCO2Saved": { "type": "number", "default": 0 },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["uid", "role", "schoolId"]
     },
-    "Mission": {
-      "title": "Eco Mission",
-      "description": "Tasks created by teachers for students to complete.",
+    "School": {
+      "title": "Institutional Hub",
+      "description": "School aggregate impact and basic info.",
       "type": "object",
       "properties": {
+        "schoolId": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "totalPoints": { "type": "number", "default": 0 },
+        "totalCO2Reduced": { "type": "number", "default": 0 },
+        "totalPlasticReduced": { "type": "number", "default": 0 },
+        "totalTrees": { "type": "number", "default": 0 }
+      }
+    },
+    "Mission": {
+      "title": "Eco Mission",
+      "description": "Tasks created for students with measurable impact.",
+      "type": "object",
+      "properties": {
+        "missionId": { "type": "string" },
         "title": { "type": "string" },
         "description": { "type": "string" },
         "points": { "type": "number" },
         "impactType": { "type": "string", "enum": ["co2", "plastic", "trees", "water"] },
         "impactValue": { "type": "number" },
         "schoolId": { "type": "string" },
-        "status": { "type": "string", "enum": ["pending", "approved"] }
+        "status": { "type": "string", "enum": ["pending", "approved"] },
+        "createdBy": { "type": "string" }
       }
     },
     "Submission": {
-      "title": "Mission Submission",
-      "description": "Student proof for completed missions.",
+      "title": "Mission Proof",
+      "description": "Student proof for verified task completion.",
       "type": "object",
       "properties": {
         "missionId": { "type": "string" },
@@ -43,19 +60,21 @@
         "proofUrl": { "type": "string" },
         "status": { "type": "string", "enum": ["pending", "verified", "rejected"] },
         "feedback": { "type": "string" },
-        "submittedAt": { "type": "string", "format": "date-time" }
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "verifiedAt": { "type": "string", "format": "date-time" }
       }
     },
     "CarbonReport": {
-      "title": "Monthly Carbon Report",
-      "description": "Data used for calculating student carbon footprint.",
+      "title": "Carbon Audit",
+      "description": "Detailed monthly carbon calculation data.",
       "type": "object",
       "properties": {
         "studentId": { "type": "string" },
         "month": { "type": "string" },
-        "travelKM": { "type": "object" },
+        "carKM": { "type": "number" },
+        "busKM": { "type": "number" },
         "electricityKWh": { "type": "number" },
-        "dietType": { "type": "string" },
+        "dietType": { "type": "string", "enum": ["VEG", "MIXED", "NON_VEG"] },
         "totalCO2": { "type": "number" }
       }
     }
@@ -66,23 +85,27 @@
   "firestore": {
     "/users/{userId}": {
       "schema": "User",
-      "description": "User profiles and gamification state."
+      "description": "Student and teacher profiles."
     },
     "/schools/{schoolId}": {
-      "schema": { "type": "object" },
-      "description": "School aggregate impact stats."
+      "schema": "School",
+      "description": "School aggregate impact metrics."
     },
     "/missions/{missionId}": {
       "schema": "Mission",
-      "description": "Global or school-specific tasks."
+      "description": "Platform-wide and school-specific tasks."
     },
     "/submissions/{submissionId}": {
       "schema": "Submission",
-      "description": "Proof of work from students."
+      "description": "Verified student activities."
     },
     "/carbonReports/{reportId}": {
       "schema": "CarbonReport",
-      "description": "Historical carbon calculation data."
+      "description": "Historical carbon footprint data."
+    },
+    "/leaderboards/{schoolId}": {
+      "schema": { "type": "object", "properties": { "rankings": { "type": "array" } } },
+      "description": "Aggregated leaderboard data."
     }
   }
 }

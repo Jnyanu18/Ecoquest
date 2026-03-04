@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useEffect, useState } from 'react'
@@ -13,63 +14,77 @@ import {
   ChevronRight, 
   Sparkles,
   TrendingUp,
-  Award
+  Award,
+  Calendar
 } from "lucide-react"
 import { MOCK_USER } from "@/lib/constants"
+import { getXPProgress, getLevelFromXP } from "@/lib/gamification-engine"
 import { getPersonalizedEcoTips } from "@/ai/flows/personalized-eco-tips"
 
 export default function StudentDashboard() {
   const [tips, setTips] = useState<string[]>([])
   const [loadingTips, setLoadingTips] = useState(true)
 
+  const progress = getXPProgress(MOCK_USER.xp);
+  const currentLevel = getLevelFromXP(MOCK_USER.xp);
+
   useEffect(() => {
     async function fetchTips() {
       try {
         const result = await getPersonalizedEcoTips({
-          learningProgressSummary: `Completed ${MOCK_USER.level} levels. Average quiz score 85%. Strong in waste management.`,
-          completedTasksSummary: ["Planted 2 saplings", "1 week plastic-free"]
+          learningProgressSummary: `Level ${currentLevel} student. Strong in plastic reduction.`,
+          completedTasksSummary: ["Planted 2 saplings", "Waste management module"]
         })
         setTips(result.tips)
       } catch (error) {
-        console.error("Failed to fetch tips", error)
-        setTips(["Try using a reusable water bottle today!", "Turn off lights when leaving the room."])
+        setTips(["Reduce meat consumption for 3 days.", "Switch to a bamboo toothbrush."])
       } finally {
         setLoadingTips(false)
       }
     }
     fetchTips()
-  }, [])
+  }, [currentLevel])
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="font-headline text-3xl font-bold mb-2">Welcome back, {MOCK_USER.name}!</h1>
-        <p className="text-muted-foreground">You're on a 5-day streak. Keep it up!</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-headline text-3xl font-bold mb-1 tracking-tight">Eco Dashboard</h1>
+          <p className="text-muted-foreground flex items-center gap-2">
+            <Calendar className="w-4 h-4" />
+            Active Streak: <span className="text-accent font-bold">{MOCK_USER.streak} Days</span>
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="px-4 py-1.5 border-accent/20 text-accent font-bold">
+            Rank #42 Global
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="accent-glow">
+        <Card className="accent-glow bg-card/50 border-accent/20">
           <CardHeader className="pb-2">
-            <CardDescription>Experience Points</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Total XP</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
-              {MOCK_USER.xp} XP
+              {MOCK_USER.xp}
               <TrendingUp className="w-5 h-5 text-accent" />
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="flex justify-between text-xs">
-                <span>Level {MOCK_USER.level}</span>
-                <span>Level {MOCK_USER.level + 1}</span>
+              <div className="flex justify-between text-[10px] font-bold uppercase text-muted-foreground">
+                <span>LVL {currentLevel}</span>
+                <span>LVL {currentLevel + 1}</span>
               </div>
-              <Progress value={65} className="h-2" />
+              <Progress value={progress} className="h-2 bg-muted/50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-card/50">
           <CardHeader className="pb-2">
-            <CardDescription>Trees Planted</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Trees Planted</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
               {MOCK_USER.stats.treesPlanted}
               <TreePine className="w-5 h-5 text-green-500" />
@@ -77,9 +92,9 @@ export default function StudentDashboard() {
           </CardHeader>
         </Card>
 
-        <Card>
+        <Card className="bg-card/50">
           <CardHeader className="pb-2">
-            <CardDescription>CO₂ Offset</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Carbon Offset</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
               {MOCK_USER.stats.co2SavedKg}kg
               <Wind className="w-5 h-5 text-blue-400" />
@@ -87,9 +102,9 @@ export default function StudentDashboard() {
           </CardHeader>
         </Card>
 
-        <Card>
+        <Card className="bg-card/50">
           <CardHeader className="pb-2">
-            <CardDescription>Water Saved</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Water Impact</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
               {MOCK_USER.stats.waterSavedLiters}L
               <Droplets className="w-5 h-5 text-cyan-500" />
@@ -100,36 +115,36 @@ export default function StudentDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-primary/5 border-primary/20">
+          <Card className="border-accent/10 bg-gradient-to-br from-accent/5 to-transparent">
             <CardHeader>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
-                <CardTitle className="font-headline">AI-Powered Eco Tips</CardTitle>
+                <CardTitle className="font-headline text-xl">AI-Tailored Eco Strategy</CardTitle>
               </div>
-              <CardDescription>Personalized suggestions based on your recent activity.</CardDescription>
+              <CardDescription>Hyper-personalized suggestions based on your profile.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-4">
+              <div className="grid gap-3">
                 {loadingTips ? (
-                  [1, 2, 3].map(i => <div key={i} className="h-10 bg-muted animate-pulse rounded-lg" />)
+                  [1, 2, 3].map(i => <div key={i} className="h-14 bg-muted animate-pulse rounded-xl" />)
                 ) : (
                   tips.map((tip, i) => (
-                    <li key={i} className="flex gap-3 p-3 rounded-lg bg-card/50 border border-border/50">
-                      <div className="bg-accent/20 w-8 h-8 rounded-full flex items-center justify-center shrink-0">
-                        <span className="text-accent text-xs font-bold">{i + 1}</span>
+                    <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border/50 group hover:border-accent/30 transition-all cursor-default">
+                      <div className="bg-accent/10 w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-accent/20">
+                        <span className="text-accent text-[10px] font-bold">{i + 1}</span>
                       </div>
-                      <p className="text-sm leading-relaxed">{tip}</p>
-                    </li>
+                      <p className="text-sm font-medium leading-relaxed">{tip}</p>
+                    </div>
                   ))
                 )}
-              </ul>
+              </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="font-headline">Active Challenges</CardTitle>
-              <Button variant="link" size="sm" className="text-accent">View All</Button>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="font-headline text-lg">Active Institutional Challenges</CardTitle>
+              <Button variant="link" size="sm" className="text-accent font-bold">BATTLE HUB</Button>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-4 rounded-xl border border-border/50 bg-card/30 flex items-center justify-between group cursor-pointer hover:border-accent/50 transition-colors">
@@ -139,7 +154,7 @@ export default function StudentDashboard() {
                   </div>
                   <div>
                     <h4 className="font-bold">Zero Plastic Week</h4>
-                    <p className="text-sm text-muted-foreground">5 days remaining • 200 XP</p>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mt-1">5 days left • 200 XP</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors" />
@@ -150,8 +165,8 @@ export default function StudentDashboard() {
                     <TreePine className="w-6 h-6 text-green-500" />
                   </div>
                   <div>
-                    <h4 className="font-bold">Plant a Sapling</h4>
-                    <p className="text-sm text-muted-foreground">One-time task • 150 XP</p>
+                    <h4 className="font-bold">Afforestation Drive</h4>
+                    <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mt-1">One-time • 300 XP</p>
                   </div>
                 </div>
                 <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors" />
@@ -161,34 +176,36 @@ export default function StudentDashboard() {
         </div>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="border-accent/20 bg-card/50">
             <CardHeader>
-              <CardTitle className="font-headline flex items-center gap-2">
+              <CardTitle className="font-headline text-lg flex items-center gap-2">
                 <Award className="w-5 h-5 text-accent" />
-                Recent Badges
+                Impact Badges
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {MOCK_USER.badges.map(badge => (
-                  <Badge key={badge} variant="secondary" className="px-3 py-1 bg-primary/20 text-accent border-accent/20">
-                    {badge}
-                  </Badge>
+                  <div key={badge} className="flex flex-col items-center justify-center p-3 rounded-xl bg-accent/5 border border-accent/10 text-center">
+                    <span className="text-2xl mb-1">🏅</span>
+                    <span className="text-[10px] font-bold uppercase text-accent tracking-tighter">{badge}</span>
+                  </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="eco-gradient text-white border-none">
+          <Card className="eco-gradient text-white border-none shadow-xl overflow-hidden relative">
+            <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
             <CardHeader>
-              <CardTitle className="font-headline text-accent">School EcoScore</CardTitle>
-              <CardDescription className="text-white/70">Green Valley High Ranking</CardDescription>
+              <CardTitle className="font-headline text-accent">School EcoRank</CardTitle>
+              <CardDescription className="text-white/70">Green Valley High Status</CardDescription>
             </CardHeader>
             <CardContent className="text-center py-6">
-              <div className="text-6xl font-headline font-bold mb-2">A+</div>
-              <p className="text-sm text-accent font-medium">Top 5% Schools Nationally</p>
-              <Button className="mt-6 w-full bg-white/10 hover:bg-white/20 text-white border-none">
-                View School Battle
+              <div className="text-7xl font-headline font-bold mb-2 text-white">A+</div>
+              <p className="text-xs text-accent font-bold uppercase tracking-widest">Elite Tier School</p>
+              <Button className="mt-6 w-full bg-white/10 hover:bg-white/20 text-white border-none font-bold">
+                VIEW LEADERBOARD
               </Button>
             </CardContent>
           </Card>
