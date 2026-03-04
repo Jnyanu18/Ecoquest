@@ -5,21 +5,16 @@ EcoQuest is a production-grade, SIH-level SaaS platform designed to gamify susta
 
 ## 🚀 How to Push to GitHub
 
-Run these commands in your local terminal:
+If your push was **rejected**, it is because the GitHub repo has files (like a default README) that your local project doesn't have. Run these commands:
 
-1. **Initialize Git & Commit**:
+1. **Force Push (Recommended for first-time setup)**:
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: EcoQuest Production Build"
+   git push -u origin main --force
    ```
-2. **Link to GitHub**:
+
+2. **Alternative (Merge Remote Changes)**:
    ```bash
-   git branch -M main
-   git remote add origin https://github.com/Jnyanu18/Ecoquest.git
-   ```
-3. **Push**:
-   ```bash
+   git pull origin main --rebase
    git push -u origin main
    ```
 

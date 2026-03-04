@@ -16,19 +16,28 @@ EcoQuest is a production-grade, SIH-level SaaS platform designed to gamify susta
 - **Frontend**: Next.js 15 (App Router), Tailwind CSS, ShadCN UI.
 - **Backend**: Firebase (Authentication, Firestore, App Hosting).
 - **AI Engine**: Google Genkit + Gemini 2.0 Flash.
-- **Monitoring**: Integrated Firebase Error Emitter for Security Rules debugging.
 
 ## 📦 How to Push to GitHub
 
-To push this project to your repository, run the following commands in your local terminal:
+To resolve the "rejected" error you saw, you need to sync the remote changes first or force the initial push. Use these updated commands:
 
+```bash
+# Option A: Recommended (Sync then Push)
+git pull origin main --rebase
+git push -u origin main
+
+# Option B: Force Push (Overwrite remote with local - Use only for initial setup)
+git push -u origin main --force
+```
+
+Full initialization sequence if starting over:
 ```bash
 git init
 git add .
 git commit -m "Initial commit: EcoQuest Production"
 git branch -M main
 git remote add origin https://github.com/Jnyanu18/Ecoquest.git
-git push -u origin main
+git push -u origin main --force
 ```
 
 ## ⚙️ Deployment & CI/CD
