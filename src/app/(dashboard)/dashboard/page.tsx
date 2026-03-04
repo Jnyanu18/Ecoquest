@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useEffect, useState, useMemo } from 'react'
@@ -112,7 +113,7 @@ export default function StudentDashboard() {
           <CardHeader className="pb-2">
             <CardDescription className="text-[10px] font-bold uppercase tracking-widest">CO2 Saved</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
-              {profile?.totalCO2Saved?.toFixed(1) || 0}kg
+              {profile?.totalCO2Saved ? Number(profile.totalCO2Saved).toFixed(1) : '0.0'}kg
               <Wind className="w-5 h-5 text-blue-400" />
             </CardTitle>
           </CardHeader>
@@ -132,7 +133,7 @@ export default function StudentDashboard() {
           <CardHeader className="pb-2">
             <CardDescription className="text-[10px] font-bold uppercase tracking-widest">Role</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
-              <span className="capitalize">{profile?.role}</span>
+              <span className="capitalize">{profile?.role || 'User'}</span>
               <Award className="w-5 h-5 text-accent" />
             </CardTitle>
           </CardHeader>

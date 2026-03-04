@@ -15,7 +15,7 @@ import {
   Loader2
 } from "lucide-react"
 import { useFirestore, useCollection, useDoc } from '@/firebase'
-import { collection, query, where, orderBy, limit } from 'firebase/firestore'
+import { collection, query, where, orderBy, limit, doc } from 'firebase/firestore'
 import { 
   BarChart, 
   Bar, 
@@ -23,9 +23,7 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  ResponsiveContainer,
-  LineChart,
-  Line
+  ResponsiveContainer
 } from 'recharts'
 
 export default function TeacherDashboard() {
@@ -87,7 +85,7 @@ export default function TeacherDashboard() {
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-bold uppercase">Total CO2 Reduced</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
-              {school?.totalCO2Reduced || 1240}kg
+              {school?.totalCO2Reduced || 0}kg
               <Leaf className="w-5 h-5 text-accent" />
             </CardTitle>
           </CardHeader>
@@ -96,7 +94,7 @@ export default function TeacherDashboard() {
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-bold uppercase">Eco Points Earned</CardDescription>
             <CardTitle className="text-3xl font-headline flex items-center justify-between">
-              {school?.totalPoints || 15800}
+              {school?.totalPoints || 0}
               <Trophy className="w-5 h-5 text-yellow-500" />
             </CardTitle>
           </CardHeader>
@@ -159,12 +157,12 @@ export default function TeacherDashboard() {
                   </div>
                   <div>
                     <p className="font-bold text-sm">{student.name}</p>
-                    <p className="text-[10px] text-muted-foreground uppercase">Level {student.level}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase">Level {student.level || 1}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-accent">{student.ecoPoints} XP</p>
-                  <Progress value={(student.ecoPoints / 2000) * 100} className="w-20 h-1 mt-1" />
+                  <p className="font-bold text-accent">{student.ecoPoints || 0} XP</p>
+                  <Progress value={Math.min((student.ecoPoints || 0) / 20, 100)} className="w-20 h-1 mt-1" />
                 </div>
               </div>
             ))}
@@ -180,7 +178,7 @@ export default function TeacherDashboard() {
             </div>
             <div>
               <CardTitle className="font-headline">Low Engagement Modules</CardTitle>
-              <CardDescription>Courses with < 20% completion rate.</CardDescription>
+              <CardDescription>Courses with &lt; 20% completion rate.</CardDescription>
             </div>
           </CardHeader>
           <CardContent>
@@ -219,5 +217,3 @@ export default function TeacherDashboard() {
     </div>
   )
 }
-
-import { doc } from 'firebase/firestore'
