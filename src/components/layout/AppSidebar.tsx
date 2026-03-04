@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -9,7 +10,9 @@ import {
   ShieldCheck, 
   Leaf,
   Calculator,
-  Loader2
+  Loader2,
+  LineChart,
+  Settings
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -29,6 +32,7 @@ import { doc } from 'firebase/firestore'
 
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard", roles: ["student", "teacher", "admin"] },
+  { title: "Institutional Hub", icon: LineChart, url: "/teacher", roles: ["teacher", "admin"] },
   { title: "Carbon Tracker", icon: Calculator, url: "/carbon-calculator", roles: ["student"] },
   { title: "Missions", icon: Target, url: "/missions", roles: ["student"] },
   { title: "Learning Hub", icon: BookOpen, url: "/learn", roles: ["student"] },

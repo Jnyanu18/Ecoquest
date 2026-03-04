@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState } from 'react'
@@ -5,9 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Clock, Award, Star, Search, Play } from "lucide-react"
+import { BookOpen, Clock, Award, Star, Search, Play, BrainCircuit } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
+import Link from "next/link"
 
 const modules = [
   {
@@ -66,7 +68,10 @@ export default function LearningHub() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="font-headline text-3xl font-bold mb-2">Learning Hub</h1>
-          <p className="text-muted-foreground">Complete modules to earn XP and boost your EcoScore.</p>
+          <p className="text-muted-foreground flex items-center gap-2">
+            <BrainCircuit className="w-4 h-4 text-accent" />
+            AI-Enhanced Competency Modules
+          </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
@@ -91,7 +96,7 @@ export default function LearningHub() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {modules.filter(m => filter === 'All' || m.category === filter).map((module) => (
-          <Card key={module.id} className="overflow-hidden group hover:border-accent/50 transition-all">
+          <Card key={module.id} className="overflow-hidden group hover:border-accent/50 transition-all flex flex-col h-full">
             <div className="relative h-48 w-full overflow-hidden">
               <Image 
                 src={module.image} 
@@ -121,7 +126,7 @@ export default function LearningHub() {
               </div>
               <CardDescription className="line-clamp-2">{module.description}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex-1">
               <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                 <div className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
@@ -141,9 +146,11 @@ export default function LearningHub() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full bg-primary/10 hover:bg-primary/20 text-foreground border border-primary/20 group">
-                {module.progress === 0 ? 'Start Module' : module.progress === 100 ? 'Review Module' : 'Continue Learning'}
-                <Play className="w-4 h-4 ml-2 fill-current" />
+              <Button className="w-full bg-primary/10 hover:bg-primary/20 text-foreground border border-primary/20 group" asChild>
+                <Link href={`/learn/${module.id}`}>
+                  {module.progress === 0 ? 'Start Module' : module.progress === 100 ? 'Review Module' : 'Continue Learning'}
+                  <Play className="w-4 h-4 ml-2 fill-current" />
+                </Link>
               </Button>
             </CardFooter>
           </Card>
