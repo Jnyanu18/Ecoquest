@@ -1,57 +1,55 @@
-# EcoQuest | Gamified Environmental Education
+# EcoQuest | Gamified Environmental Education Platform
 
 EcoQuest is a production-grade, SIH-level SaaS platform designed to gamify sustainability education in schools and colleges. It features real-time carbon tracking, institutional analytics, and an AI-powered mentorship system.
 
-## 🚀 Features
+## 🚀 Key Features
 
-- **Dual Dashboard System**: Tailored views for Students (XP/Badges) and Teachers (Verification/Analytics).
-- **Carbon Audit Engine**: Precise CO2 calculation based on travel, energy, and diet data.
-- **AI Eco Mentor**: Personalized sustainability coaching powered by Gemini 2.0 Flash.
-- **Learning Hub**: Interactive modules with AI-generated summaries and quizzes.
-- **Gamification**: XP-based leveling, streaks, and impact badges.
+- **Dual Dashboard System**: Adaptive UI for Students (XP, Streaks, Badges) and Teachers (Verification, Analytics).
+- **Carbon Audit Engine**: High-precision CO2 calculation for travel (Car: 0.21kg/km), electricity (0.82kg/kWh), and diet.
+- **AI Eco Mentor**: Personalized sustainability coaching powered by **Gemini 2.0 Flash**.
+- **Institutional Analytics**: Real-time aggregation of school-wide impact metrics.
+- **Verification Loop**: Teacher-led proof-of-work verification system with image support.
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 15 (App Router), Tailwind CSS, ShadCN UI.
-- **Backend**: Firebase (Auth, Firestore).
-- **AI**: Genkit with Google Gemini.
+- **Backend**: Firebase (Authentication, Firestore, App Hosting).
+- **AI Engine**: Google Genkit + Gemini 2.0 Flash.
+- **Monitoring**: Integrated Firebase Error Emitter for Security Rules debugging.
 
-## 📦 How to Push to GitHub
+## 📦 Project Structure
 
-To push this project to your own GitHub repository, follow these steps:
+```text
+src/
+├── ai/                # Genkit Flows (Summaries, Quizzes, Eco Mentor)
+├── app/               # Next.js App Router (Dashboards & Auth)
+├── components/        # Shared UI & Sidebar Layouts
+├── firebase/          # Client SDK Initialization & Custom Hooks
+├── lib/               # Business Logic (Carbon Engine, Gamification)
+└── hooks/             # Custom React Hooks
+```
 
-1. **Create a new repository** on GitHub (do not initialize with a README).
-2. **Open your terminal** in the project root.
-3. **Initialize Git**:
-   ```bash
-   git init
-   ```
-4. **Add your files**:
-   ```bash
-   git add .
-   ```
-5. **Commit your changes**:
-   ```bash
-   git commit -m "Initial commit: EcoQuest Platform"
-   ```
-6. **Rename branch** (optional but recommended):
-   ```bash
-   git branch -M main
-   ```
-7. **Add Remote**:
-   ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-   ```
-8. **Push**:
-   ```bash
-   git push -u origin main
-   ```
+## ⚙️ Deployment & CI/CD
 
-## ⚙️ Firebase Setup
+This project is configured for **Firebase App Hosting**. A GitHub Action is included in `.github/workflows/firebase-app-hosting.yml` to automate builds.
 
-Ensure you have your Firebase configuration updated in `src/firebase/config.ts`. You will also need to enable:
-- Email/Password and Google Authentication.
-- Cloud Firestore in Production mode.
+### To Push to GitHub:
+1. Create a repository on GitHub.
+2. Run the following in your terminal:
+```bash
+git init
+git add .
+git commit -m "Initial commit: EcoQuest Production"
+git branch -M main
+git remote add origin YOUR_REPOSITORY_LINK
+git push -u origin main
+```
+
+### Environment Variables:
+Ensure the following secrets are set in your GitHub repository and Firebase Console:
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `GEMINI_API_KEY`
 
 ---
 Built for a greener tomorrow.
